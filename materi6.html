@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoAI Satellite & Deforestation Intelligence Hub</title>
+    <style>
+        :root {
+            --bg-deep: #030712;
+            --card-glass: rgba(15, 23, 42, 0.75);
+            --border-glow: rgba(59, 130, 246, 0.4);
+            --neon-cyan: #06b6d4;
+            --neon-blue: #3b82f6;
+            --neon-emerald: #10b981;
+            --neon-amber: #f59e0b;
+            --neon-rose: #f43f5e;
+            --neon-purple: #a855f7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header Neon */
+        header {
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glow);
+            padding: 22px 32px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.45rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .live-badge {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--neon-emerald);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        /* Top Statistik Kartu Warna-Warni */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .stat-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-left: 6px solid;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover { transform: translateY(-3px); }
+
+        .stat-card.c1 { border-color: var(--neon-cyan); }
+        .stat-card.c2 { border-color: var(--neon-emerald); }
+        .stat-card.c3 { border-color: var(--neon-amber); }
+        .stat-card.c4 { border-color: var(--neon-purple); }
+
+        .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .stat-value { font-size: 1.6rem; font-weight: 900; color: var(--text-main); }
+
+        /* Grid Utama */
+        .grid-main {
+            display: grid;
+            grid-template-columns: 1fr 1.35fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Input Presisi */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+
+        input, select {
+            background: rgba(3, 7, 18, 0.8);
+            border: 1px solid #334155;
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.25s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-action:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6); }
+
+        /* Filter Region Bar */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(3, 7, 18, 0.8);
+            color: var(--text-muted);
+            border: 1px solid #334155;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background: var(--neon-purple);
+            color: white;
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
+        /* Tabel Presisi Tinggi */
+        .table-container {
+            overflow-x: auto;
+            max-height: 330px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.86rem;
+        }
+
+        th, td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        th { background: rgba(3, 7, 18, 0.95); color: var(--text-muted); font-weight: 700; position: sticky; top: 0; z-index: 2; }
+        tr:hover { background: rgba(59, 130, 246, 0.08); }
+
+        /* Badge Driver Berwarna */
+        .badge-driver {
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: inline-block;
+        }
+
+        .drv-agri { background: rgba(16, 185, 129, 0.2); color: var(--neon-emerald); border: 1px solid rgba(16, 185, 129, 0.4); }
+        .drv-mining { background: rgba(245, 158, 11, 0.2); color: var(--neon-amber); border: 1px solid rgba(245, 158, 11, 0.4); }
+        .drv-logging { background: rgba(6, 182, 212, 0.2); color: var(--neon-cyan); border: 1px solid rgba(6, 182, 212, 0.4); }
+        .drv-fire { background: rgba(244, 63, 94, 0.2); color: var(--neon-rose); border: 1px solid rgba(244, 63, 94, 0.4); }
+
+        .confidence-pill {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--neon-purple);
+            background: rgba(168, 85, 247, 0.15);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .btn-delete {
+            color: var(--neon-rose);
+            cursor: pointer;
+            font-weight: 700;
+            background: none;
+            border: none;
+            font-size: 0.85rem;
+        }
+        .btn-delete:hover { text-decoration: underline; }
+
+        /* Grafik Bar Chart Berwarna */
+        .chart-box {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 22px;
+        }
+
+        .chart-bar-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chart-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .bar-track {
+            background: #1e293b;
+            border-radius: 10px;
+            height: 16px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (max-width: 1100px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .grid-main { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header>
+            <div class="brand">
+                <span>🛰️</span> GeoAI Satellite & Deforestation Hub
+            </div>
+            <div class="live-badge">
+                ● Sentinel-1 & 2 AI Stream Active
+            </div>
+        </header>
+
+        <!-- Top Statistik Presisi -->
+        <div class="stats-grid">
+            <div class="stat-card c1">
+                <span class="stat-label">Total Area Terdampak</span>
+                <span class="stat-value" id="totalArea">0 Ha</span>
+            </div>
+            <div class="stat-card c2">
+                <span class="stat-label">Total Titik Alert Satelit</span>
+                <span class="stat-value" id="totalAlerts">0 Titik</span>
+            </div>
+            <div class="stat-card c3">
+                <span class="stat-label">Driver Paling Dominan</span>
+                <span class="stat-value" id="topDriver" style="font-size: 1.15rem; color: var(--neon-amber);">-</span>
+            </div>
+            <div class="stat-card c4">
+                <span class="stat-label">Rata-Rata Akurasi AI</span>
+                <span class="stat-value" style="color: var(--neon-purple);">94.8%</span>
+            </div>
+        </div>
+
+        <!-- Grid Utama: Form Input Presisi & Grafik -->
+        <div class="grid-main">
+            
+            <!-- Kolom Kiri: Form Input Data Presisi -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📡 Simulasikan Deteksi Satelit & Atribusi AI</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Nama Sektor / Koordinat Lokasi:</label>
+                    <input type="text" id="locInput" placeholder="Contoh: Blok 7B Kalteng (S 1.45°, E 113.2°)">
+                </div>
+
+                <div class="form-group">
+                    <label>Region Geografis:</label>
+                    <select id="regionInput">
+                        <option value="Asia Tenggara">Asia Tenggara (Borneo/Sumatera)</option>
+                        <option value="Amazon">Amazon Basin (Brasil/Bolivia)</option>
+                        <option value="Congo Basin">Congo Basin (Kongo/Gabon)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Klasifikasi Driver (CNN Model):</label>
+                    <select id="driverInput">
+                        <option value="Pertanian">Pertanian / Land Clearing (Agri)</option>
+                        <option value="Pertambangan">Pertambangan Emas Ilegal (Mining)</option>
+                        <option value="Penebangan Liar">Penebangan Liar (Logging Roads)</option>
+                        <option value="Kebakaran Hutan">Kebakaran Hutan (Wildfires)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Luas Area Kerusakan (Hektar):</label>
+                    <input type="number" id="areaInput" placeholder="Contoh: 25" min="1" max="1000">
+                </div>
+
+                <button class="btn-action" onclick="addAlert()">Jalankan Analisis AI & Catat</button>
+            </div>
+
+            <!-- Kolom Kanan: Grafik Proporsi Multi-Warna -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📊 Distribusi Dampak Driver (Multi-Color Analytics)</span>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-bar-wrap">
+                        <div class="chart-label"><span>Pertanian (Agriculture)</span><span id="txtAgri">0 Ha (0%)</span></div>
+                        <div class="bar-track"><div class="bar-fill" id="barAgri" style="width: 0%; background: linear-gradient(90deg, #059669, #10b981);"></div></div>
+                    </div>
+                    <div class="chart-bar-wrap">
+                        <div class="chart-label"><span>Pertambangan (Mining)</span><span id="txtMining">0 Ha (0%)</span></div>
+                        <div class="bar-track"><div class="bar-fill" id="barMining" style="width: 0%; background: linear-gradient(90deg, #d97706, #f59e0b);"></div></div>
+                    </div>
+                    <div class="chart-bar-wrap">
+                        <div class="chart-label"><span>Penebangan Liar (Logging)</span><span id="txtLogging">0 Ha (0%)</span></div>
+                        <div class="bar-track"><div class="bar-fill" id="barLogging" style="width: 0%; background: linear-gradient(90deg, #0284c7, #06b6d4);"></div></div>
+                    </div>
+                    <div class="chart-bar-wrap">
+                        <div class="chart-label"><span>Kebakaran Hutan (Wildfires)</span><span id="txtFire">0 Ha (0%)</span></div>
+                        <div class="bar-track"><div class="bar-fill" id="barFire" style="width: 0%; background: linear-gradient(90deg, #e11d48, #f43f5e);"></div></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bagian Bawah: Tabel Riwayat & Filter -->
+        <div class="card">
+            <div class="card-title" style="justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                <span>📋 Live Satellite Alert Log & AI Confidence Matrix</span>
+                <div class="filter-bar">
+                    <button class="filter-btn active" onclick="filterRegion('Semua', this)">Semua Region</button>
+                    <button class="filter-btn" onclick="filterRegion('Asia Tenggara', this)">Asia Tenggara</button>
+                    <button class="filter-btn" onclick="filterRegion('Amazon', this)">Amazon</button>
+                    <button class="filter-btn" onclick="filterRegion('Congo Basin', this)">Congo Basin</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Lokasi / Koordinat Sektor</th>
+                            <th>Region</th>
+                            <th>Driver Utama (AI)</th>
+                            <th>Keyakinan AI</th>
+                            <th>Luas (Ha)</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data Dummy Otomatis -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let alerts = [
+            { id: 1, loc: 'Kalimantan Tengah (S 1.2°, E 113.8°)', region: 'Asia Tenggara', driver: 'Pertanian', confidence: '96.2%', area: 55 },
+            { id: 2, loc: 'Amazon Sector 4 (S 3.1°, W 62.4°)', region: 'Amazon', driver: 'Pertambangan', confidence: '91.8%', area: 120 },
+            { id: 3, loc: 'Congo North Reserve (N 0.4°, E 18.2°)', region: 'Congo Basin', driver: 'Penebangan Liar', confidence: '94.5%', area: 40 },
+            { id: 4, loc: 'Kalimantan Barat (S 0.8°, E 110.1°)', region: 'Asia Tenggara', driver: 'Kebakaran Hutan', confidence: '98.1%', area: 85 }
+        ];
+
+        let currentRegion = 'Semua';
+
+        function renderDashboard() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            let filtered = alerts.filter(a => currentRegion === 'Semua' || a.region === currentRegion);
+
+            let totalAreaSum = 0;
+            let driverSums = { Pertanian: 0, Pertambangan: 0, 'Penebangan Liar': 0, 'Kebakaran Hutan': 0 };
+
+            alerts.forEach(a => {
+                totalAreaSum += a.area;
+                if(driverSums[a.driver] !== undefined) driverSums[a.driver] += a.area;
+            });
+
+            // Render Tabel
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 25px;">Tidak ada data alert pada region ini.</td></tr>`;
+            } else {
+                filtered.forEach((a, index) => {
+                    let badgeClass = 'drv-agri';
+                    if(a.driver === 'Pertambangan') badgeClass = 'drv-mining';
+                    else if(a.driver === 'Penebangan Liar') badgeClass = 'drv-logging';
+                    else if(a.driver === 'Kebakaran Hutan') badgeClass = 'drv-fire';
+
+                    tbody.innerHTML = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td><strong>${a.loc}</strong></td>
+                            <td>${a.region}</td>
+                            <td><span class="badge-driver ${badgeClass}">${a.driver}</span></td>
+                            <td><span class="confidence-pill">${a.confidence}</span></td>
+                            <td>${a.area} Ha</td>
+                            <td><button class="btn-delete" onclick="deleteAlert(${a.id})">Hapus</button></td>
+                        </tr>
+                    ` + tbody.innerHTML;
+                });
+            }
+
+            // Update Statistik Kartu
+            document.getElementById('totalArea').innerText = totalAreaSum.toLocaleString('id-ID') + ' Ha';
+            document.getElementById('totalAlerts').innerText = alerts.length + ' Titik';
+
+            let topDrv = '-';
+            let maxVal = -1;
+            for(let drv in driverSums) {
+                if(driverSums[drv] > maxVal) {
+                    maxVal = driverSums[drv];
+                    topDrv = drv;
+                }
+            }
+            document.getElementById('topDriver').innerText = maxVal > 0 ? topDrv : '-';
+
+            // Update Grafik Bar Chart Multi-Warna
+            updateBar('Agri', driverSums['Pertanian'], totalAreaSum);
+            updateBar('Mining', driverSums['Pertambangan'], totalAreaSum);
+            updateBar('Logging', driverSums['Penebangan Liar'], totalAreaSum);
+            updateBar('Fire', driverSums['Kebakaran Hutan'], totalAreaSum);
+        }
+
+        function updateBar(key, sum, total) {
+            let pct = total > 0 ? Math.round((sum / total) * 100) : 0;
+            document.getElementById('bar' + key).style.width = pct + '%';
+            document.getElementById('txt' + key).innerText = `${sum.toLocaleString('id-ID')} Ha (${pct}%)`;
+        }
+
+        function addAlert() {
+            const loc = document.getElementById('locInput').value.trim();
+            const region = document.getElementById('regionInput').value;
+            const driver = document.getElementById('driverInput').value;
+            const area = parseFloat(document.getElementById('areaInput').value);
+
+            if(!loc || isNaN(area) || area <= 0) {
+                alert('Mohon isi nama lokasi/koordinat dan luas area kerusakan dengan benar!');
+                return;
+            }
+
+            // Simulasi akurasi AI acak presisi tinggi (90% - 99%)
+            const randomConf = (90 + Math.random() * 9).toFixed(1) + '%';
+
+            const newAlert = {
+                id: Date.now(),
+                loc: loc,
+                region: region,
+                driver: driver,
+                confidence: randomConf,
+                area: area
+            };
+
+            alerts.push(newAlert);
+
+            // Reset Form
+            document.getElementById('locInput').value = '';
+            document.getElementById('areaInput').value = '';
+
+            renderDashboard();
+        }
+
+        function deleteAlert(id) {
+            alerts = alerts.filter(a => a.id !== id);
+            renderDashboard();
+        }
+
+        function filterRegion(region, btn) {
+            currentRegion = region;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderDashboard();
+        }
+
+        renderDashboard();
+    </script>
+</body>
+</html>
