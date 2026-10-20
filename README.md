@@ -4,10 +4,10 @@ Dashboard web interaktif dan pusat kecerdasan spasial berbasis studi kasus nyata
 
 ## 🚀 Live Demo
 Akses website secara online melalui tautan GitHub Pages resmi:
-[https://ayusaraswati25.github.io/forest-deforestation-ai/](https://ayusaraswati25.github.io/forest-deforestation-ai/)
+[https://ayusaraswati25.github.io/forest-deforestation-ai/](https://Ayusaraswati.github.io/forest-deforestation-ai/)
 
 ## 📂 Link Repositori
-[https://github.com/ayusaraswati25/forest-deforestation-ai](https://github.com/ayusaraswati25/forest-deforestation-ai)
+[https://github.com/ayusaraswati25/forest-deforestation-ai](https://github.com/Ayusaraswati/forest-deforestation-ai)
 
 ---
 
